@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Ajax跨域问题总结 | 饥饿的荔枝</title>
+<meta name="description" content="&lt;h2&gt;微信公众号：饥饿的荔枝&lt;br/&gt;&lt;/h2&gt;
+&lt;image height=&#34;200&#34; width=&#34;200&#34; src=&#34;https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/qrcode_for_gh_5f9669a6c469_258.jpg&#34;&gt;
+&lt;br/&gt;&lt;br/&gt;
+	&lt;h3&gt;不停搜寻 不断渴求&lt;br/&gt;&lt;/h3&gt;">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://blog.wlzhfn.com/favicon.ico?v=1558792538737">
+<link rel="stylesheet" href="https://blog.wlzhfn.com/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://blog.wlzhfn.com">
+        <img src="https://blog.wlzhfn.com/images/avatar.png?v=1558792538737" class="site-logo">
+        <h1 class="site-title">饥饿的荔枝</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      <h2>微信公众号：饥饿的荔枝<br/></h2>
+<image height="200" width="200" src="https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/qrcode_for_gh_5f9669a6c469_258.jpg">
+<br/><br/>
+	<h3>不停搜寻 不断渴求<br/></h3>
+    </div>
+    <div class="site-footer">
+      
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Ajax跨域问题总结</h2>
+            <div class="post-date">2019-05-25</div>
+            
+              <div class="feature-container" style="background-image: url('https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/20190525210939.png')">
+              </div>
+            
+            <div class="post-content">
+              <p>前段时间去参加面试，有一个面试官问我是否了解跨域问题以及如何解决。我当时以为自己是知道的，但是却说不出来，己平时学习知识如果不复习或者不是经常使用就会遗忘。所以在这里详细记录下自己对跨域问题的总结。</p>
+<!-- more --> 
+<h2 id="1-什么是跨域问题">1 什么是跨域问题</h2>
+<p>跨域，指的是浏览器在访问某站点时候不能执行其他网站的脚本。它是由浏览器的同源策略（same origin policy）导致的，是<strong>浏览器施加的</strong>安全限制。</p>
+<h2 id="2-怎么产生的跨域">2 怎么产生的跨域</h2>
+<p>跨域问题实际上是浏览器的一种安全策略（同源策略），那除了浏览器限之外，它还需要满足以下两个条件才会产生跨域问题。</p>
+<ul>
+<li>跨域</li>
+<li>XHR（XmlHttpRequest）</li>
+</ul>
+<p>第一个就是要浏览器要访问的域名和当前所在域名不一致（包括ip或port或协议不一致）；第二个就是发送请求类型是XmlHttpRequest。</p>
+<p>这两个条件同时满足就会产生跨域安全问题。解决上面任何一个因素都可以解决跨域问题。</p>
+<h2 id="3-如何解决跨域问题">3 如何解决跨域问题</h2>
+<p>解决思路，从以上产生跨域问题的条件入手，来解决跨越问题。</p>
+<p>**浏览器限制：**针对浏览器限制的话，需要修改浏览器的设置，在其中取消跨域限制，这个可以自己进行尝试，但是对开发者来说意义不大，我们不可能让用户挨个去设置取消自己的浏览器跨域限制。</p>
+<p><em><em>XHR：<strong>针对发送的请求类型为XHR，我们可以采用</strong></em>JSONP</em>**解决方案，但是JSONP方法只能用于Get请求，而且需要调用方和被调用方同时支持，弊端太大。</p>
+<p><em><em>跨域：<strong>可以在</strong></em>被调用方（服务端）修改</em>**，让其支持HTTP协议的跨域要求，在被调用方返回的响应信息中增加某些字段告诉浏览器自己支持当前域名的客户端调用，浏览器会检验这些字段如果符合后可以取消跨域限制。但如果这个服务方代码不是自己公司的，你无法修改，那么怎么办呢？那么你只能***修改调用方***啦。</p>
+<table>
+<thead>
+<tr>
+<th>解决方案</th>
+<th style="text-align:left">针对条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>禁止浏览器检查（意义不大）</td>
+<td style="text-align:left">浏览器限制</td>
+</tr>
+<tr>
+<td>JSONP</td>
+<td style="text-align:left">XHR</td>
+</tr>
+<tr>
+<td>修改被调用方</td>
+<td style="text-align:left">跨域、浏览器</td>
+</tr>
+<tr>
+<td>修改调用方</td>
+<td style="text-align:left">跨域</td>
+</tr>
+</tbody>
+</table>
+<p>下面我们来一一尝试这些方法。</p>
+<h3 id="31-禁止浏览器检查">3.1 禁止浏览器检查</h3>
+<p>使用命令行打开chrome 并加上禁止校验参数</p>
+<pre><code class="language-shell">cd C:\Program Files (x86)\Google\Chrome\Application
+
+chrome --disable-web-security --user-data-dir=d:\tempchrome
+</code></pre>
+<p>打开的浏览器会禁止安全校验，然后进行测试可以解决跨域问题。从这里可以看出跨域问题其实是浏览器做的校验与服务端无关。</p>
+<h3 id="32-jsonp">3.2 JSONP</h3>
+<blockquote>
+<p>JSONP or &quot;JSON with padding&quot; is a communication technique used in JavaScript programs which run in Web browsers. It provides a method to request data from a server in a different domain, something prohibited by typical web browsers because of the same origin policy. (From <a href="http://en.wikipedia.org/wiki/JSONP">Wikipedia</a> )</p>
+</blockquote>
+<p>JSONP方式有很大的弊端：</p>
+<ol>
+<li><strong>JSONP只支持GET请求不支持POST</strong></li>
+<li><strong>前后端都需要支持JSONP</strong></li>
+</ol>
+<p>所以现在不推荐使用JSONP方式去解决跨域问题。有兴趣的同学可以自行去了解一下。</p>
+<h3 id="33-被调用方解决">3.3 被调用方解决</h3>
+<p>在被调用方响应Header中添加上一些信息支持跨域，浏览器接收到Response时候检查到有这些Header信息就不会进行限制。</p>
+<h4 id="331-服务器端代码实现">3.3.1 服务器端代码实现</h4>
+<h5 id="3311-filter解决方案">3.3.1.1 filter解决方案</h5>
+<p>增加一个CrosFilter拦截器拦截所有请求，在doFilter方法中在响应头中增加允许跨域字段</p>
+<pre><code class="language-java">HttpServletReponse res = (HttpServletReponse) response;
+
+//允许所有方法 包含GET、POST等
+res.addHeader(&quot;Access-Control-Allow-Methods&quot;,&quot;*&quot;);
+//允许所有域名访问（但不能满足带cookie的请求，带cookie只能将完全对应的域加入进去）
+res.addHeader(&quot;Access-Control-Allow-Origin&quot;,&quot;*&quot;);
+//允许请求头Type Content-Type
+res.addHeader(&quot;Access-Control-Allow-Headers&quot;,&quot;Content-Type&quot;);
+//允许浏览器缓存OPTIONS预检命令1小时
+res.addHeader(&quot;Access-Control-Max-Age&quot;,&quot;3600&quot;);
+
+</code></pre>
+<p>上面的配置无法满足带cookie的跨域访问，如果需要带cookie的跨域访问需要使用下面的配置</p>
+<pre><code class="language-java">HttpServletResponse res = (HttpServletReponse) response;
+HttpServletRequest req = (HttpServletReponse) request;
+
+//允许所有方法 包含GET、POST等
+res.addHeader(&quot;Access-Control-Allow-Methods&quot;,&quot;*&quot;);
+//获取访问者的完全域名
+String origin = request.getHeader(&quot;Origin&quot;);
+//带cookie的访问不能使用*匹配，只能使用全域名匹配
+res.addHeader(&quot;Access-Control-Allow-Origin&quot;,origin);
+
+//允许所有请求头Type
+String headers = request.getHeader(&quot;Access-Control-Request-Headers&quot;);
+res.addHeader(&quot;Access-Control-Allow-Headers&quot;,headers);
+//允许浏览器缓存OPTIONS预检命令1小时
+res.addHeader(&quot;Access-Control-Max-Age&quot;,&quot;3600&quot;);
+
+//添加允许cookie的Header
+res.addHeader(&quot;Access-Control-Allow-Credentials&quot;,&quot;true&quot;);
+</code></pre>
+<h4 id="332-nginxapache配置">3.3.2 NGINX/APACHE配置</h4>
+<p>在NGINX/APACHE 服务器配置文件中 中增加响应头请自行查询。</p>
+<h4 id="333-spring解决方案">3.3.3 Spring解决方案</h4>
+<p>前面的方案都与框架无关，如果你是用的是Spring框架，那么解决跨域问题相当简单，在相应的<code>Controller</code><strong>类</strong>或具体<strong>方法</strong>上添加<code>@CrossOrigin</code>注解即可。</p>
+<h3 id="34-调用方解决">3.4 调用方解决</h3>
+<p>实际上是基于隐藏跨域解决方案，是根据调用方的Nginx或Apache进行反向代理，将要请求的域名写成本域的域名，通过Nginx配置将请求转发到实际调用的域名。</p>
+<p>比如我正在访问的 域名是a.com,但是我需要访问一个b.com上的资源（比如b.com/path/xxx）,那么我可以在前端页面将这个访问换成当前的域名（比如可以换成相对路径crossb/path/xxx）,然后再Nginx的配置文件中配置代理转发地址：</p>
+<pre><code class="language-shell">location crossb/path/xxx{
+	proxy_pass b.com/path/xxx
+}
+</code></pre>
+<p>那么我浏览器就会以为这个资源是当前域的资源，不存在跨域问题，而真正的资源由Nginx转发请求到真正的地址去获得。</p>
+<p>本总结参考慕课网课程：<a href="https://www.imooc.com/learn/947">《ajax跨域完全讲解》</a></p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://blog.wlzhfn.com/tag/problems-of-develop" class="tag">
+                    开发常见问题
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://blog.wlzhfn.com/post/use-virtualbox-install-centos7-vm">
+                  <h3 class="post-title">
+                    使用VirtualBox安装Centos7虚拟机
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
