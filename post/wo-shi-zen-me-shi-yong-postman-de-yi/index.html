@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>我是怎么使用Postman的【一】 | 饥饿的荔枝</title>
+<meta name="description" content="&lt;h2&gt;微信公众号：饥饿的荔枝&lt;br/&gt;&lt;/h2&gt;
+&lt;image height=&#34;200&#34; width=&#34;200&#34; src=&#34;https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/qrcode_for_gh_5f9669a6c469_258.jpg&#34;&gt;
+&lt;br/&gt;&lt;br/&gt;
+	&lt;h3&gt;不停搜寻 不断渴求&lt;br/&gt;&lt;/h3&gt;">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://blog.wlzhfn.com/favicon.ico?v=1583683993986">
+<link rel="stylesheet" href="https://blog.wlzhfn.com/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://blog.wlzhfn.com">
+        <img src="https://blog.wlzhfn.com/images/avatar.png?v=1583683993986" class="site-logo">
+        <h1 class="site-title">饥饿的荔枝</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      <h2>微信公众号：饥饿的荔枝<br/></h2>
+<image height="200" width="200" src="https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/qrcode_for_gh_5f9669a6c469_258.jpg">
+<br/><br/>
+	<h3>不停搜寻 不断渴求<br/></h3>
+    </div>
+    <div class="site-footer">
+      
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">我是怎么使用Postman的【一】</h2>
+            <div class="post-date">2020-03-09</div>
+            
+              <div class="feature-container" style="background-image: url('https://blog.wlzhfn.com/post-images/wo-shi-zen-me-shi-yong-postman-de-yi.png')">
+              </div>
+            
+            <div class="post-content">
+              <p>本来想简单写写Postman基础使用方法的，但是觉得大家随便搜搜就都能了解到了，我就着重讲讲我在实际工作中怎么用Postman的把，希望能帮到大家。如果有什么错误或者更好的使用技巧，请留言哈。</p>
+ <!-- more --> 
+<p>一、Postman简介</p>
+<p>Postman是什么，官方介绍是</p>
+<p>The Collaboration Platform for API Development</p>
+<p>翻译过来就是一款开发API的协作平台，我们平常就是使用Postman去调用开发接口。后端程序员可以在上面测试自己写的接口，前端开发可以使用Postman来做mock，测试可以直接使用Postman测试接口，或者做简单的自动化测试。另外Postman还支持设置代理，切换环境（完全可以通过一键切换环境去调用开发、测试和生产三个环境的接口，不需要自己去更改URL）</p>
+<p>二、下载安装登录</p>
+<p>直接进入Postman官网下载对应操作系统的安装软件进行安装不必多说，目前我使用的最新版本是 v7.19.1，建议下载最新版本，不仅界面漂亮而且支持更多功能。
+Postman打开后有登录界面，可以直接忽略，不过如果你经常使用Postman的话我建议注册个Postman账号，登录账号的好处就是你可以在多台设备上同步自己的调用历史和保存接口，我觉得还是很实用的，而且个人账号是免费的，完全可以满足日常开发测试需求。</p>
+<p>三、基本使用</p>
+<p>这个不多说了，你进入主页面把要调用的URL填上点击send就能获得响应，在request视图可以添加参数，请求头、请求体、cookie等。URL可以是GET、POST等任意方式。响应体，响应头响应时间和status都能在Response视图看到</p>
+<p>四、常用功能和技巧</p>
+<p>这里写一些我常用的Postman功能和使用技巧，相信一定能帮到你。</p>
+<p>4.1 管理好层次，高效工作</p>
+<p>层次是我自己给的概念，不管是开发还是测试都一定会把自己经常用到的接口保存下来，而如果把所有的request都保存到一起肯定混乱不堪，所以这个层次就是把不同的URL分门别类的保存好。
+层次从小到大一次是  request -&gt; folder -&gt; collection -&gt; workspace -&gt;用户
+简单介绍就是一个用户可以创建多个workspace（其实一个workspace也可以添加许多用户），一个workspace可以创建多个collection，collection里面既可以放folder也可以放request。</p>
+<p>4.1.1 根据场合切换Workspace
+用户可以创建多个workspace，每个workspace都是互不干扰的。workspace还可以邀请其他人一起来使用和维护。
+我在实际工作中根据使用场合创建了两套workspace，一个是在家开发学习使用的，还有一个是上班工作使用的。为什么不给每个项目创建一个workspace呢？我的情况是可能会有同时测试两个相关联的项目，不可能去切换workspace，而且environment（环境，不了解的没关系，我下面会讲）不能跨workspace。你如果没有这方面的限制可以考虑为每个项目创建个workspace。</p>
+<p>4.1.2 为每个项目创建一个Collection
+以项目名字命名，把这个项目的所有request都放在同一个Collection中</p>
+<p>4.1.2 为每个模块创建一个Folder
+可以以模块来命名创建Folder，把这个模块下的request都放在这个Folder中，模块中可以有子模块，folder中也可以有子folder。</p>
+<p>4.1.3 保存好常用的Request
+将常用的Request保存下来写上描述，方便后续复用。</p>
+<p>这样一来Postman就整洁很多，工作效率也会大大提高。</p>
+<p>4.2 使用环境和变量，一键切换环境</p>
+<p>开发的时候我们可能会有很多环境，比如开发环境、测试环境、生产环境。环境不同，调用的URL自然也不同，那么你是不是要为每套环境都写一个request呢？使用environment（环境）和variable（变量）可以帮你轻松搞定这个麻烦。</p>
+<p>在面板右上角可以选择、查看和创建环境和变量，下拉框快速选择当前使用的环境，眼睛图标能快速查看当前的变量值，齿轮就是对环境和变量的设置。</p>
+<p>点击齿轮会弹出环境管理弹窗，点击对应环境或点击add会对环境和环境变量进行编辑，Globals是对全局变量进行设置，全局变量不会跟着环境变，每个workspace只有一套全局变量，可以有多套环境变量。</p>
+<p>环境变量界面可以设置环境变量的名称和值，以及更改环境变量名称。</p>
+<p>环境和变量都设置好了，那么该怎么用呢？请看下去：</p>
+<p>如图所示，我在右上角选择了生产环境并把之前写死的地方都用 {{variable}}的形式来代替了，这样在发送request请求的时候，相应的地方就会被替换成variable的值，在输入变量的时候Postman还会有补全提示，而且Postman也提供了大量的内置变量，比如{{timestamp}}的值就是当前时间戳，{{randomInt}}会键入随机数字。
+这样当我想切换到测试接口的时候我完全只要把需要变的地方写到测试环境变量中，通过右上角切换到测试环境就可以了，是不是很简单呢。
+值得注意的是，环境变量是作用到当前workspace的，也就是说其他workspace是看不到当前这套环境的，如果想要在其他workspace也使用这个环境的话就需要手动复制过去了。再也就是说这个workspace中其他的collection（在我这就是项目）也能用到当前的环境变量，如果想要对项目有区分的话建议在环境变量前加上项目前缀比如我的{{project1-host}}这样。</p>
+<p>还值得注意的是如果有些变量需要在所有环境共用，那么你就应该写在Globals里面（全局变量也是作用在当前workspace的），你可能会问，那我可以直接写死啊，写死当然可以，但那样就不是变量了，变量就是要变的，后面讲到Pre-req和Tests你就知道变量的作用了。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://blog.wlzhfn.com/tag/tools" class="tag">
+                    工具
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://blog.wlzhfn.com/post/ajax-cross-origin-summary">
+                  <h3 class="post-title">
+                    Ajax跨域问题总结
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
