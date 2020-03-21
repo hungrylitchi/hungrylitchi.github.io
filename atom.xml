@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://blog.wlzhfn.com</id>
+    <title>饥饿的荔枝</title>
+    <updated>2020-03-21T15:30:14.742Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://blog.wlzhfn.com"/>
+    <link rel="self" href="https://blog.wlzhfn.com/atom.xml"/>
+    <subtitle>&lt;h2&gt;微信公众号：饥饿的荔枝&lt;br/&gt;&lt;/h2&gt;
+&lt;image height=&quot;200&quot; width=&quot;200&quot; src=&quot;https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/qrcode_for_gh_5f9669a6c469_258.jpg&quot;&gt;
+&lt;br/&gt;&lt;br/&gt;
+	&lt;h3&gt;不停搜寻 不断渴求&lt;br/&gt;&lt;/h3&gt;</subtitle>
+    <logo>https://blog.wlzhfn.com/images/avatar.png</logo>
+    <icon>https://blog.wlzhfn.com/favicon.ico</icon>
+    <rights>All rights reserved 2020, 饥饿的荔枝</rights>
+    <entry>
+        <title type="html"><![CDATA[Centos7安装Mysql8绿色版]]></title>
+        <id>https://blog.wlzhfn.com/post/centos7-install-mysql8/</id>
+        <link href="https://blog.wlzhfn.com/post/centos7-install-mysql8/">
+        </link>
+        <updated>2020-03-21T15:24:25.000Z</updated>
+        <content type="html"><![CDATA[<p>又一次在我的虚拟机上安装Mysql8，其实在Centos可以使用yum安装Mysql，我之前也是这样安装的：先下载安装npm然后等yum install下载安装好后进行一些配置。<br>
+但是这次在install时候网速奇慢，更换阿里云镜像后更慢。。。我又想起以前yum安装的时候各种配置文件找不到，所以我这次决定自己动手安装个绿色版。</p>
+<h1 id="下载">下载</h1>
+<p><a href="https://dev.mysql.com/downloads/mysql/">https://dev.mysql.com/downloads/mysql/</a></p>
+<p>这里还要先检查一下自己Linux系统上是否安装有对应版本的glibc 否则需要安装升级<br>
+检查命令： <code>strings /lib64/libc.so.6 | grep GLIBC</code><br>
+<img src="https://img-blog.csdnimg.cn/20200321200346387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="下载mysql压缩包" loading="lazy"><br>
+这里我选择了xz格式文件，这个格式在Linux里面还要解压一次才能得到tar包。嫌麻烦的可以直接选择tar包下载。<br>
+把下载链接复制到迅雷里面下载简直快到飞起。<br>
+或者网速够快可以直接在Linux里wget这个包。</p>
+<h1 id="解压">解压</h1>
+<p>解压之前最好先检查一下之前操作系统上是否有安装过Mysql或Mariadb，统统干掉。<br>
+查找mysql相关安装命令：<br>
+<code>rpm -qa|grep -i mysql</code><br>
+卸载命令：<br>
+<code>rpm –ev 包名</code><br>
+查找Mysql目录命令：<br>
+<code>find / -name mysql</code><br>
+删除目录命令：<br>
+<code>rm –rf 目录名</code></p>
+<p>解压xz文件:<br>
+<code>xz -dk mysql-8.0.19-linux-glibc2.12-x86_64.tar.xz</code><br>
+解压tar文件：<br>
+<code>tar xvf mysql-8.0.19-linux-glibc2.12-x86_64.tar</code><br>
+将解压出来的 mysql文件夹复制或移动到你 想放的地方<br>
+我放在了 /usr/local/mysql<br>
+<code>mv mysql-8.0.19-linux-glibc2.12-x86_64 /usr/local/mysql</code><br>
+在解压的时候有个小插曲，因为我的吝啬，虚拟机磁盘只配置了8个G，解压的时候磁盘不够用了，只能给虚拟机扩展磁盘，有兴需要的可以参考这篇文章https://bugxia.com/581.html</p>
+<h1 id="设置mysql用户和权限">设置mysql用户和权限</h1>
+<p>如果之前有mysql用户可以先删除<br>
+<code>userdel -r mysql</code><br>
+添加mysql用户 :<br>
+<code>useradd mysql</code><br>
+设置权限：<br>
+<code>chown -R mysql:mysql /usr/local/mysql</code></p>
+<h1 id="创建配置文件">创建配置文件</h1>
+<p>创建配置文件 my.cnf<br>
+<code>vim /etc/my.cnf</code></p>
+<pre><code class="language-properties">[mysqld]
+#用户
+user=root
+#端口
+port=3306
+#这里配置0.0.0.0，任何ip都可以登录
+bind-address=0.0.0.0
+#数据地址
+datadir=/usr/local/mysql/data
+#socket
+socket=/tmp/mysql.sock
+#日志地址
+log-error=/usr/local/mysql/log/mysqld.log
+#pid
+pid-file=/tmp/mysqld/mysqld.pid
+default_authentication_plugin=mysql_native_password
+</code></pre>
+<p>创建所需目录和文件</p>
+<pre><code class="language-bash">#log
+mkdir /usr/local/mysql/log
+touch /usr/local/mysql/log/mysqld.log
+#data
+mkdir /usr/local/mysql/data
+#pid
+mkdir /tmp/mysqld/
+touch /tmp/mysqld/mysqld.pid
+chown -R mysql:mysql /tmp/mysqld/
+#socket
+touch /tmp/mysql.sock
+chmod 755 /tmp/mysql.sock
+</code></pre>
+<p>好了，到这里数据库就已经安装好了，但还需要一些设置才能使用</p>
+<h1 id="初始化数据库">初始化数据库</h1>
+<p>我们先将mysql命令写入环境变量，方便后续使用</p>
+<pre><code class="language-bash">echo &quot;export PATH=$PATH:/usr/local/mysql/bin&quot;  &gt;&gt;  /etc/profile
+source /etc/profile
+</code></pre>
+<p>初始化数据库</p>
+<pre><code class="language-bash">mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+</code></pre>
+<p>查看日志文件，其中有初始化的密码，把密码记下来<br>
+<code>cat /usr/local/mysql/log/mysqld.log</code><br>
+<img src="https://img-blog.csdnimg.cn/20200321215350971.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="mysql日志" loading="lazy"></p>
+<h1 id="登录数据库修改密码">登录数据库修改密码</h1>
+<p>第一次安全启动数据库<br>
+<code>mysqld_safe --user=mysql &amp;</code></p>
+<p>查看数据库是否启动<br>
+<code>ps -ef | grep mysql |grep -v grep</code></p>
+<p>启动成功后使用root账户登录<br>
+<code>mysql -uroot -p密码</code><br>
+登录成功<img src="https://img-blog.csdnimg.cn/20200321220344631.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="mysql登录成功" loading="lazy"><br>
+然后修改密码为你自己的密码：<br>
+<code>alter user 'root'@'localhost' identified by '你的密码';</code><br>
+修改host：<br>
+<code>update mysql.user set host = '%' where user = 'root';</code><br>
+<img src="https://img-blog.csdnimg.cn/20200321220835911.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="修改密码" loading="lazy"><br>
+然后就可以退出了。<br>
+记得开启3306端口才可以远程访问。<br>
+查看已经开放的端口：<br>
+<code>firewall-cmd --list-ports</code><br>
+开启端口<br>
+<code>firewall-cmd --zone=public --add-port=3306/tcp --permanent</code><br>
+重启防火墙<br>
+<code>firewall-cmd --reload</code></p>
+<h1 id="设置数据库开机启动">设置数据库开机启动</h1>
+<p>将mysql.server 拷贝到init.d下<br>
+<code>cp -a /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql</code><br>
+设置开机启动 并查看是否开启成功<br>
+<code>chkconfig --add mysql</code><br>
+<code>chkconfig --list mysql</code><br>
+<img src="https://img-blog.csdnimg.cn/20200321222331323.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="查看是否开机启动" loading="lazy"></p>
+<p>到这就安装完成了，去试试你的mysql吧，有什么问题可以留言讨论，希望能够帮到你。</p>
+<p>参考博客：<br>
+<a href="https://www.cnblogs.com/javabg/p/9951852.html">https://www.cnblogs.com/javabg/p/9951852.html</a><br>
+<a href="https://www.jianshu.com/p/b97743024d57">https://www.jianshu.com/p/b97743024d57</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[我是怎么使用Postman的【一】]]></title>
+        <id>https://blog.wlzhfn.com/post/wo-shi-zen-me-shi-yong-postman-de-yi/</id>
+        <link href="https://blog.wlzhfn.com/post/wo-shi-zen-me-shi-yong-postman-de-yi/">
+        </link>
+        <updated>2020-03-08T16:03:14.000Z</updated>
+        <content type="html"><![CDATA[<p>本来想简单写写Postman基础使用方法的，但是觉得大家随便搜搜就都能了解到了，我就着重讲讲我在实际工作中怎么用Postman的把，希望能帮到大家。如果有什么错误或者更好的使用技巧，请留言哈。</p>
+<h1 id="一-postman简介">一、Postman简介</h1>
+<p>Postman是什么，官方介绍是</p>
+<blockquote>
+<p>The Collaboration Platform for API Development</p>
+</blockquote>
+<p>翻译过来就是一款开发API的协作平台，我们平常就是使用Postman去调用开发接口。后端程序员可以在上面测试自己写的接口，前端开发可以使用Postman来做mock，测试可以直接使用Postman测试接口，或者做简单的自动化测试。另外Postman还支持设置代理，切换环境（完全可以通过一键切换环境去调用开发、测试和生产三个环境的接口，不需要自己去更改URL）</p>
+<h1 id="二-下载安装登录">二、下载安装登录</h1>
+<p>直接进入<a href="https://www.postman.com/downloads/">Postman官网</a>下载对应操作系统的安装软件进行安装不必多说，目前我使用的最新版本是 v7.19.1，建议下载最新版本，不仅界面漂亮而且支持更多功能。<br>
+Postman打开后有登录界面，可以直接忽略，不过如果你经常使用Postman的话我建议注册个Postman账号，登录账号的好处就是你可以在多台设备上同步自己的调用历史和保存接口，我觉得还是很实用的，而且个人账号是免费的，完全可以满足日常开发测试需求。</p>
+<h1 id="三-基本使用">三、基本使用</h1>
+<p>这个不多说了，你进入主页面把要调用的URL填上点击send就能获得响应，在request视图可以添加参数，请求头、请求体、cookie等。URL可以是GET、POST等任意方式。响应体，响应头响应时间和status都能在Response视图看到<br>
+<img src="https://img-blog.csdnimg.cn/2020030821012867.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="" loading="lazy"></p>
+<h1 id="四-常用功能和技巧">四、常用功能和技巧</h1>
+<p>这里写一些我常用的Postman功能和使用技巧，相信一定能帮到你。</p>
+<h2 id="41-管理好层次高效工作">4.1 管理好层次，高效工作</h2>
+<p>层次是我自己给的概念，不管是开发还是测试都一定会把自己经常用到的接口保存下来，而如果把所有的request都保存到一起肯定混乱不堪，所以这个层次就是把不同的URL分门别类的保存好。<br>
+层次从小到大一次是  request -&gt; folder -&gt; collection -&gt; workspace -&gt;用户<br>
+简单介绍就是一个用户可以创建多个workspace（其实一个workspace也可以添加许多用户），一个workspace可以创建多个collection，collection里面既可以放folder也可以放request。</p>
+<figure data-type="image" tabindex="1"><img src="https://img-blog.csdnimg.cn/20200308215324122.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" loading="lazy"></figure>
+<p><strong>4.1.1 根据场合切换Workspace</strong><br>
+用户可以创建多个workspace，每个workspace都是互不干扰的。workspace还可以邀请其他人一起来使用和维护。<br>
+我在实际工作中根据使用场合创建了两套workspace，一个是在家开发学习使用的，还有一个是上班工作使用的。为什么不给每个项目创建一个workspace呢？我的情况是可能会有同时测试两个相关联的项目，不可能去切换workspace，而且environment（环境，不了解的没关系，我下面会讲）不能跨workspace。你如果没有这方面的限制可以考虑为每个项目创建个workspace。</p>
+<p><strong>4.1.2 为每个项目创建一个Collection</strong><br>
+以项目名字命名，把这个项目的所有request都放在同一个Collection中</p>
+<p><strong>4.1.2 为每个模块创建一个Folder</strong><br>
+可以以模块来命名创建Folder，把这个模块下的request都放在这个Folder中，模块中可以有子模块，folder中也可以有子folder。</p>
+<p><strong>4.1.3 保存好常用的Request</strong><br>
+将常用的Request保存下来写上描述，方便后续复用。</p>
+<p>这样一来Postman就整洁很多，工作效率也会大大提高。</p>
+<h2 id="42-使用环境和变量一键切换环境">4.2 使用环境和变量，一键切换环境</h2>
+<p>开发的时候我们可能会有很多环境，比如开发环境、测试环境、生产环境。环境不同，调用的URL自然也不同，那么你是不是要为每套环境都写一个request呢？使用environment（环境）和variable（变量）可以帮你轻松搞定这个麻烦。</p>
+<p>在面板右上角可以选择、查看和创建环境和变量，下拉框快速选择当前使用的环境，眼睛图标能快速查看当前的变量值，齿轮就是对环境和变量的设置。<br>
+<img src="https://img-blog.csdnimg.cn/20200308224643672.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="" loading="lazy"><br>
+点击齿轮会弹出环境管理弹窗，点击对应环境或点击add会对环境和环境变量进行编辑，Globals是对全局变量进行设置，全局变量不会跟着环境变，每个workspace只有一套全局变量，可以有多套环境变量。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200308230153599.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" loading="lazy"><br>
+环境变量界面可以设置环境变量的名称和值，以及更改环境变量名称。<br>
+<img src="https://img-blog.csdnimg.cn/20200308225631188.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="" loading="lazy"><br>
+环境和变量都设置好了，那么该怎么用呢？请看下去：<br>
+<img src="https://img-blog.csdnimg.cn/20200308231155820.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" loading="lazy"><br>
+如图所示，我在右上角选择了生产环境并把之前写死的地方都用 <code>{{variable}}</code>的形式来代替了，这样在发送request请求的时候，相应的地方就会被替换成variable的值，在输入变量的时候Postman还会有补全提示，而且Postman也提供了大量的内置变量，比如<code>{{$timestamp}}</code>的值就是当前时间戳，<code>{{$randomInt}}</code>会键入随机数字。<br>
+这样当我想切换到测试接口的时候我完全只要把需要变的地方写到测试环境变量中，通过右上角切换到测试环境就可以了，是不是很简单呢。<br>
+值得注意的是，环境变量是作用到当前workspace的，也就是说其他workspace是看不到当前这套环境的，如果想要在其他workspace也使用这个环境的话就需要手动复制过去了。再也就是说这个workspace中其他的collection（在我这就是项目）也能用到当前的环境变量，如果想要对项目有区分的话建议在环境变量前加上项目前缀比如我的<code>{{project1-host}}</code>这样。</p>
+<p>还值得注意的是如果有些变量需要在所有环境共用，那么你就应该写在<strong>Globals</strong>里面（全局变量也是作用在当前workspace的），你可能会问，那我可以直接写死啊，写死当然可以，但那样就不是变量了，变量就是要变的，后面讲到<strong>Pre-req</strong>和<strong>Tests</strong>你就知道变量的作用了。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Ajax跨域问题总结]]></title>
+        <id>https://blog.wlzhfn.com/post/ajax-cross-origin-summary/</id>
+        <link href="https://blog.wlzhfn.com/post/ajax-cross-origin-summary/">
+        </link>
+        <updated>2019-05-25T13:03:28.000Z</updated>
+        <summary type="html"><![CDATA[<p>前段时间去参加面试，有一个面试官问我是否了解跨域问题以及如何解决。我当时以为自己是知道的，但是却说不出来，自己平时学习知识如果不复习或者不是经常使用就会遗忘。所以在这里详细记录下自己对跨域问题的总结。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>前段时间去参加面试，有一个面试官问我是否了解跨域问题以及如何解决。我当时以为自己是知道的，但是却说不出来，自己平时学习知识如果不复习或者不是经常使用就会遗忘。所以在这里详细记录下自己对跨域问题的总结。</p>
+<!-- more --> 
+<h2 id="1-什么是跨域问题">1 什么是跨域问题</h2>
+<p>跨域，指的是浏览器在访问某站点时候不能执行其他网站的脚本。它是由浏览器的同源策略（same origin policy）导致的，是<strong>浏览器施加的</strong>安全限制。</p>
+<h2 id="2-怎么产生的跨域">2 怎么产生的跨域</h2>
+<p>跨域问题实际上是浏览器的一种安全策略（同源策略），那除了浏览器限之外，它还需要满足以下两个条件才会产生跨域问题。</p>
+<ul>
+<li>跨域</li>
+<li>XHR（XmlHttpRequest）</li>
+</ul>
+<p>第一个就是要浏览器要访问的域名和当前所在域名不一致（包括ip或port或协议不一致）；第二个就是发送请求类型是XmlHttpRequest。</p>
+<p>这两个条件同时满足就会产生跨域安全问题。解决上面任何一个因素都可以解决跨域问题。</p>
+<h2 id="3-如何解决跨域问题">3 如何解决跨域问题</h2>
+<p>解决思路，从以上产生跨域问题的条件入手，来解决跨越问题。</p>
+<p>**浏览器限制：**针对浏览器限制的话，需要修改浏览器的设置，在其中取消跨域限制，这个可以自己进行尝试，但是对开发者来说意义不大，我们不可能让用户挨个去设置取消自己的浏览器跨域限制。</p>
+<p><em><em>XHR：<strong>针对发送的请求类型为XHR，我们可以采用</strong></em>JSONP</em>**解决方案，但是JSONP方法只能用于Get请求，而且需要调用方和被调用方同时支持，弊端太大。</p>
+<p><em><em>跨域：<strong>可以在</strong></em>被调用方（服务端）修改</em>**，让其支持HTTP协议的跨域要求，在被调用方返回的响应信息中增加某些字段告诉浏览器自己支持当前域名的客户端调用，浏览器会检验这些字段如果符合后可以取消跨域限制。但如果这个服务方代码不是自己公司的，你无法修改，那么怎么办呢？那么你只能***修改调用方***啦。</p>
+<table>
+<thead>
+<tr>
+<th>解决方案</th>
+<th style="text-align:left">针对条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>禁止浏览器检查（意义不大）</td>
+<td style="text-align:left">浏览器限制</td>
+</tr>
+<tr>
+<td>JSONP</td>
+<td style="text-align:left">XHR</td>
+</tr>
+<tr>
+<td>修改被调用方</td>
+<td style="text-align:left">跨域、浏览器</td>
+</tr>
+<tr>
+<td>修改调用方</td>
+<td style="text-align:left">跨域</td>
+</tr>
+</tbody>
+</table>
+<p>下面我们来一一尝试这些方法。</p>
+<h3 id="31-禁止浏览器检查">3.1 禁止浏览器检查</h3>
+<p>使用命令行打开chrome 并加上禁止校验参数</p>
+<pre><code class="language-shell">cd C:\Program Files (x86)\Google\Chrome\Application
+
+chrome --disable-web-security --user-data-dir=d:\tempchrome
+</code></pre>
+<p>打开的浏览器会禁止安全校验，然后进行测试可以解决跨域问题。从这里可以看出跨域问题其实是浏览器做的校验与服务端无关。</p>
+<h3 id="32-jsonp">3.2 JSONP</h3>
+<blockquote>
+<p>JSONP or &quot;JSON with padding&quot; is a communication technique used in JavaScript programs which run in Web browsers. It provides a method to request data from a server in a different domain, something prohibited by typical web browsers because of the same origin policy. (From <a href="http://en.wikipedia.org/wiki/JSONP">Wikipedia</a> )</p>
+</blockquote>
+<p>JSONP方式有很大的弊端：</p>
+<ol>
+<li><strong>JSONP只支持GET请求不支持POST</strong></li>
+<li><strong>前后端都需要支持JSONP</strong></li>
+</ol>
+<p>所以现在不推荐使用JSONP方式去解决跨域问题。有兴趣的同学可以自行去了解一下。</p>
+<h3 id="33-被调用方解决">3.3 被调用方解决</h3>
+<p>在被调用方响应Header中添加上一些信息支持跨域，浏览器接收到Response时候检查到有这些Header信息就不会进行限制。</p>
+<h4 id="331-服务器端代码实现">3.3.1 服务器端代码实现</h4>
+<h5 id="3311-filter解决方案">3.3.1.1 filter解决方案</h5>
+<p>增加一个CrosFilter拦截器拦截所有请求，在doFilter方法中在响应头中增加允许跨域字段</p>
+<pre><code class="language-java">HttpServletReponse res = (HttpServletReponse) response;
+
+//允许所有方法 包含GET、POST等
+res.addHeader(&quot;Access-Control-Allow-Methods&quot;,&quot;*&quot;);
+//允许所有域名访问（但不能满足带cookie的请求，带cookie只能将完全对应的域加入进去）
+res.addHeader(&quot;Access-Control-Allow-Origin&quot;,&quot;*&quot;);
+//允许请求头Type Content-Type
+res.addHeader(&quot;Access-Control-Allow-Headers&quot;,&quot;Content-Type&quot;);
+//允许浏览器缓存OPTIONS预检命令1小时
+res.addHeader(&quot;Access-Control-Max-Age&quot;,&quot;3600&quot;);
+
+</code></pre>
+<p>上面的配置无法满足带cookie的跨域访问，如果需要带cookie的跨域访问需要使用下面的配置</p>
+<pre><code class="language-java">HttpServletResponse res = (HttpServletReponse) response;
+HttpServletRequest req = (HttpServletReponse) request;
+
+//允许所有方法 包含GET、POST等
+res.addHeader(&quot;Access-Control-Allow-Methods&quot;,&quot;*&quot;);
+//获取访问者的完全域名
+String origin = request.getHeader(&quot;Origin&quot;);
+//带cookie的访问不能使用*匹配，只能使用全域名匹配
+res.addHeader(&quot;Access-Control-Allow-Origin&quot;,origin);
+
+//允许所有请求头Type
+String headers = request.getHeader(&quot;Access-Control-Request-Headers&quot;);
+res.addHeader(&quot;Access-Control-Allow-Headers&quot;,headers);
+//允许浏览器缓存OPTIONS预检命令1小时
+res.addHeader(&quot;Access-Control-Max-Age&quot;,&quot;3600&quot;);
+
+//添加允许cookie的Header
+res.addHeader(&quot;Access-Control-Allow-Credentials&quot;,&quot;true&quot;);
+</code></pre>
+<h4 id="332-nginxapache配置">3.3.2 NGINX/APACHE配置</h4>
+<p>在NGINX/APACHE 服务器配置文件中 中增加响应头请自行查询。</p>
+<h4 id="333-spring解决方案">3.3.3 Spring解决方案</h4>
+<p>前面的方案都与框架无关，如果你是用的是Spring框架，那么解决跨域问题相当简单，在相应的<code>Controller</code><strong>类</strong>或具体<strong>方法</strong>上添加<code>@CrossOrigin</code>注解即可。</p>
+<h3 id="34-调用方解决">3.4 调用方解决</h3>
+<p>实际上是基于隐藏跨域解决方案，是根据调用方的Nginx或Apache进行反向代理，将要请求的域名写成本域的域名，通过Nginx配置将请求转发到实际调用的域名。</p>
+<p>比如我正在访问的 域名是a.com,但是我需要访问一个b.com上的资源（比如b.com/path/xxx）,那么我可以在前端页面将这个访问换成当前的域名（比如可以换成相对路径crossb/path/xxx）,然后再Nginx的配置文件中配置代理转发地址：</p>
+<pre><code class="language-shell">location crossb/path/xxx{
+	proxy_pass b.com/path/xxx
+}
+</code></pre>
+<p>那么我浏览器就会以为这个资源是当前域的资源，不存在跨域问题，而真正的资源由Nginx转发请求到真正的地址去获得。</p>
+<p>本总结参考慕课网课程：<a href="https://www.imooc.com/learn/947">《ajax跨域完全讲解》</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用VirtualBox安装Centos7虚拟机]]></title>
+        <id>https://blog.wlzhfn.com/post/use-virtualbox-install-centos7-vm/</id>
+        <link href="https://blog.wlzhfn.com/post/use-virtualbox-install-centos7-vm/">
+        </link>
+        <updated>2019-05-15T04:11:13.000Z</updated>
+        <summary type="html"><![CDATA[<p>本文介绍了如何使用VirtualBox安装Centos7虚拟机，如果你想知道如何使用VirtualBox安装Centos7，那么就跟我一起来学习吧。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>本文介绍了如何使用VirtualBox安装Centos7虚拟机，如果你想知道如何使用VirtualBox安装Centos7，那么就跟我一起来学习吧。</p>
+<!-- more -->
+<h2 id="1-安装环境和准备">1 安装环境和准备</h2>
+<p>win10操作系统</p>
+<p>安装VirtualBox  我使用的版本是5.1.24 （最新版本<a href="https://download.virtualbox.org/virtualbox/5.2.28/VirtualBox-5.2.28-130011-Win.exe">5.2.8点击官网下载</a>）</p>
+<p>下载Centos7镜像  我在<a href="https://www.centos.org/download/">官网</a>找的<a href="http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso">7.6版本</a>的DVD.iso ，7版本差异应该不大</p>
+<h2 id="2-新建虚拟机">2 新建虚拟机</h2>
+<p>打开VirtualBox -&gt;新建-&gt; 输入虚拟机名称、操作系统类型（Linux）、和版本（Centos属于RedHat）-&gt;下一步</p>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2019/05/15/5cdb8dd3df5f642958.png" alt="新建虚拟机" loading="lazy"></figure>
+<p>接下来调整内存大小和虚拟磁盘我都选择的默认。</p>
+<p>虚拟磁盘文件类型选择的时候有多种类型可以选择：VDI、VHD、和VMDK。</p>
+<p>我上网查询这个如果创建的虚拟机只在VirtualBox上运行可以默认选择VDI，这个VDI是VirtualBox独有的虚拟硬盘文件类型。如果希望以后在VMWare上也可以使用这个虚拟机，那么选择VMDK。</p>
+<p>我这里选择VMDK。</p>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2019/05/15/5cdb8ea3c435896798.png" alt="选择虚拟磁盘文件类型" loading="lazy"></figure>
+<p>下面都默认即可，最后点击创建即可完成虚拟机创建。</p>
+<h2 id="3-安装操作系统">3 安装操作系统</h2>
+<h3 id="31-导入镜像文件并启动安装">3.1 导入镜像文件并启动安装</h3>
+<p>双击刚刚创建的虚拟机，会提示让你选择启动盘，将准备好的Centos7镜像文件导入，点击启动。</p>
+<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2019/05/15/5cdb8f9e55d0c49436.png" alt="引入启动盘" loading="lazy"></figure>
+<p>鼠标点进去虚拟机使用方向键选择install Centos Linux 回车。等待启动安装程序</p>
+<figure data-type="image" tabindex="4"><img src="https://i.loli.net/2019/05/15/5cdb8fc44dc0e49729.png" alt="安装Centos7 Linux" loading="lazy"></figure>
+<h3 id="32-选择安装语言">3.2 选择安装语言</h3>
+<p>选择安装语言 English&gt; English（United States）  -&gt;点击Continue</p>
+<h3 id="33-进入安装设置页面">3.3 进入安装设置页面</h3>
+<p>进入安装设置页面，这是整个安装过程中最重要的一个页面。</p>
+<figure data-type="image" tabindex="5"><img src="https://i.loli.net/2019/05/15/5cdb8fed26dd536727.png" alt="安装配置" loading="lazy"></figure>
+<ol>
+<li>Date&amp;Time选择 Asia <strong>Shanghai</strong></li>
+<li>KEYBOARD和LANG SUPPORT使用<strong>默认</strong>English</li>
+<li>INSTALLATION SOURCE<strong>默认</strong>选择LocalMedia</li>
+<li>进入SOFTWARE SELECTION选择<strong>Minimal Install</strong>（这个是最小安装，安装好后只有命令行终端，如果需要图形化桌面可以再这里选择GNOME Desktop安装），点击Done完成。</li>
+</ol>
+<p><img src="https://i.loli.net/2019/05/15/5cdb902260e9398680.png" alt="安装方式" loading="lazy"><br>
+5. kdump是在系统崩溃、死锁或者死机的时候用来转储内存运行参数的一个工具和服务，默认使用可以不必调整。<br>
+6. Destination 必须选择，进入后选中Local Standard Disks中的磁盘即可。然后点击Done。</p>
+<figure data-type="image" tabindex="6"><img src="https://i.loli.net/2019/05/15/5cdb9053189be36292.png" alt="选择安装位置" loading="lazy"></figure>
+<ol start="7">
+<li>kdump是在系统崩溃、死锁或者死机的时候用来转储内存运行参数的一个工具和服务，默认使用可以不必调整。</li>
+<li>安全策略和网络连接先忽略。</li>
+<li>点击Begin Installation开始安装。</li>
+</ol>
+<h3 id="34-创建用户">3.4 创建用户</h3>
+<p>安装过程中可以为root创建密码，并创建一个新用户</p>
+<figure data-type="image" tabindex="7"><img src="https://i.loli.net/2019/05/15/5cdb906a68b6c84030.png" alt="" loading="lazy"></figure>
+<p>root密码如果比较短，那么需要点击两次done来确认完成。</p>
+<figure data-type="image" tabindex="8"><img src="https://i.loli.net/2019/05/15/5cdb9078ec7b455805.png" alt="root设置密码" loading="lazy"></figure>
+<p>创建用户，用户名和密码自己指定 ，选中make this user admin ，可以使用这个用户执行sodu命令。</p>
+<p>我创建的是centos：centos ，weak密码需要两次done。</p>
+<figure data-type="image" tabindex="9"><img src="https://i.loli.net/2019/05/15/5cdb8b33c9d5e79618.png" alt="创建用户" loading="lazy"></figure>
+<h3 id="35-完成">3.5 完成</h3>
+<p>等待安装完成后点击 Finish Configuration，等待配置初始化完成后点击Reboot重启虚拟机。<img src="https://i.loli.net/2019/05/15/5cdb90bd2553b95368.png" alt="完成配置" loading="lazy"></p>
+<p>重启完成后Linux就安装成功了，可以使用刚刚创建的centos用户或root用户登录虚拟机。</p>
+<figure data-type="image" tabindex="10"><img src="https://i.loli.net/2019/05/15/5cdb90ce9a30693158.png" alt="安装成功" loading="lazy"></figure>
+<p>到这里虚拟机就已经安装好了，但是由于我们使用的是Minimal Install安装方式，而且没有设置网络连接，所以Linux上很多常用的软件我们都无法使用，下面我们就来设置一下网络，设置好网络后再安装一些常用软件。</p>
+<h2 id="4-网络设置">4 网络设置</h2>
+<p>我们想要使用虚拟机，一定是想要它进行联网的，而且我们想要使用自己的电脑去连接并登录这台虚拟机， 那么就应该知道它的ip地址。所以在这里我们就对虚拟机的网络进行一下配置，并给虚拟机设置一个静态ip地址。</p>
+<h3 id="41-虚拟机联网设置">4.1 虚拟机联网设置</h3>
+<p>先将虚拟机关闭，然后在VirtualBox上右键点击虚拟机-&gt;设置-&gt;网络</p>
+<figure data-type="image" tabindex="11"><img src="https://i.loli.net/2019/05/15/5cdb90dd56c9998369.png" alt="网卡1" loading="lazy"></figure>
+<p>刚创建的虚拟机默认只打开了网卡1，并设置了<code>网络地址转换（NAT）</code> 的连接方式，我们想要使用网络还需要打开网卡2选择<strong>桥接网卡</strong>，并在界面名称选择当前使用的网卡（一般来说你电脑上正在使用的是有线网还是无线网，这个网卡会不一样，自己区分一下）。</p>
+<figure data-type="image" tabindex="12"><img src="https://i.loli.net/2019/05/15/5cdb90ef8cab595271.png" alt="添加桥接网卡" loading="lazy"></figure>
+<p>点击ok ，启动虚拟机。启动计算机后最好使用root登录，因为有些配置需要root权限。</p>
+<p>我们先使用<code>ip addr</code> 命令查看下ip情况</p>
+<figure data-type="image" tabindex="13"><img src="https://i.loli.net/2019/05/15/5cdb90fd6b7d481459.png" alt="查看网卡情况" loading="lazy"></figure>
+<p>我们可以看到多了一个网卡 <code>enp0s8</code>,之前是只有<code>lo</code>和<code>enp0s3</code>的，而且新网卡可以看见ip地址等信息。</p>
+<p>从这里我们可以看出网卡2已经可以使用了，那么我们试试<code>ping www.baidu.com</code>来看看是否已经可以连接到互联网。</p>
+<figure data-type="image" tabindex="14"><img src="https://i.loli.net/2019/05/15/5cdb910eeab7e49064.png" alt="测试网络连接" loading="lazy"></figure>
+<p>从上图中可以看出可以ping同百度的网址，那么我们的虚拟机已经可以成功联网啦，那么虚拟机联网的问题已经解决。那么我们刚才已经查到了虚拟机的ip地址，是否可以使用本地去连接这个虚拟机呢。自己在主机上ping一下试试吧。</p>
+<p>答案肯定是可以ping通的，不过这个IP地址是<strong>动态分配</strong>的，也就是说每次开启虚拟机给这个虚拟机分配的IP都是不同的，那么如果我们需要连接这个虚拟机时候都需要先来虚拟机来查询虚拟机的IP，这样很麻烦。所以接下来我们要为虚拟机设置静态IP，让虚拟机每次开机都使用这个静态ip。</p>
+<h3 id="42-设置静态ip">4.2 设置静态ip</h3>
+<p>我觉得VirtualBox的客户端太难用，既然现在已经知道了虚拟机的ip地址，那么从这里我要使用一个软件通过SSH来连接这个虚拟机，</p>
+<p>我使用的是<a href="https://mobaxterm.mobatek.net/"><strong>MobaXterm</strong></a>，这个软件很强大，它不仅可以像PuTTY一样通过SSH连接Raspberry Pi等开源硬件，并且还能有内建SFTP文件传输、内建X server，可远程运行X窗口程序，有兴趣的同学可以自行安装体验。</p>
+<p>Centos的网卡设置都在<code>/etc/sysconfig/network-scripts/</code> 这个目录下面</p>
+<figure data-type="image" tabindex="15"><img src="https://i.loli.net/2019/05/15/5cdb911fd2ea124842.png" alt="查看network配置目录" loading="lazy"></figure>
+<p>我们可以看到其中有 <code>ifcfg-enp0s3</code>和<code>ifcfg-lo</code>这两个文件就是lo和enp0s3两个网卡的设置文件，那么enp0s8没有配置文件，我们可以在这里创建一下。将ifcfg-enp0s3文件复制并命名为ifcfg-enp0s8。</p>
+<pre><code class="language-shell">cd /etc/sysconfig/network-scripts/
+cp ifcfg-enp0s3 ifcfg-enp0s8
+</code></pre>
+<p>查看并编辑<code>ifcfg-enp0s8</code>   使用<code>vim ifcfg-enp0s8</code>  但是发现vim这个软件还没有安装，我们可以先安装一下这个软件，也可以使用vi来查看并编辑文档。安装软件可以看本文后面的yum安装文档，这里我们还是先使用vi命令。(vi是Linux自带的文本编辑器，不需要安装)</p>
+<pre><code class="language-shell">vi ifcfg-enp0s8
+</code></pre>
+<p>将文档内容修改如下： （加注释的地方是修改过的）最下面的ipp等是后加的</p>
+<pre><code class="language-properties">TYPE=Ethernet
+#BOOTPROTO=dhcp =&gt; BOOTPROTO=static 设置为静态
+BOOTPROTO=static
+DEFROUTE=yes
+PEERDNS=yes
+PEERROUTES=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_PEERDNS=yes
+IPV6_PEERROUTES=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+#NAME=enp0s3 =&gt; NAME=enp0s8
+NAME=enp0s8
+#UUID=c2742aa6-8156-464b-abb8-6a2ec229ec76 需要去掉
+#DEVICE=enp0s3 =&gt; DEVICE=enp0s8
+DEVICE=enp0s8
+#ONBOOT=no =&gt; ONBOOT=yes 设置为开机启动
+ONBOOT=yes
+
+##add
+IPADDR=静态IP地址 （注意这个IP地址不能与其他设备的IP有冲突，并且与你的主机在同一网段）
+NETMASK=子网掩码
+GATEWAY=网关
+</code></pre>
+<p>比如我的设置为</p>
+<pre><code class="language-properties">##add
+IPADDR=192.168.199.215
+NETMASK=255.255.255.0
+GATEWAY=192.168.199.1
+</code></pre>
+<p>修改好文件后使用<code>systemctl restart network</code>命令重启网络。好了 ，这样虚拟机以后后都会使用这个静态IP不会改变了。</p>
+<h2 id="5-使用yum安装软件">5 使用Yum安装软件</h2>
+<p><a href="http://www.yanghengfei.com/tag/yum/">yum</a>（全称为 Yellow dog Updater, Modified）是一个在Fedora和RedHat以及SUSE中的Shell前端软件包管理器。基於RPM包管理，能够从指定的服务器自动下载RPM包并且安装，可以自动处理依赖性关系，并且一次安装所有依赖的软体包，无须繁琐地一次次下载、安装。yum提供了查找、安装、删除某一个、一组甚至全部软件包的命令，而且命令简洁而又好记。</p>
+<p>yum的命令形式一般是如下：<code>yum [options][command] [package ...]</code>其中的[options]是可选的，选项包括-h（帮助），-y（当安装过程提示选择全部为&quot;yes&quot;），-q（不显示安装的过程）等等。[command]为所要进行的操作，[package ...]是操作的对象。</p>
+<h3 id="51-yum常用命令">5.1 yum常用命令</h3>
+<p>我们使用yum前先来了解一下yum的常用命令：</p>
+<pre><code class="language-markdown">
+1 安装
+yum install 全部安装
+yum install package1 安装指定的安装包package1
+yum groupinsall group1 安装程序组group1
+
+2 更新和升级
+yum update 全部更新
+yum update package1 更新指定程序包package1
+yum check-update 检查可更新的程序
+yum upgrade package1 升级指定程序包package1
+yum groupupdate group1 升级程序组group1
+
+3 查找和显示
+yum search package1 使用YUM查找package1
+yum list 显示所有已经安装和可以安装的程序包
+yum list installed 列出所有已安装的软件包
+yum list extras 列出所有已安装但不在Yum Repository 內的软件包
+yum list package1 显示指定程序包安装情况package1
+yum list updates 列出所有可更新的软件包信息
+yum info 列出所有软件包的信息(列出一大堆，查找费劲，没什么用)
+yum info package1 显示安装包package1信息
+yum info updates 列出所有可更新的软件包信息
+yum info installed 列出所有已安裝的软件包信息
+yum info extras 列出所有已安裝但不在Yum Repository 內的软件包信息
+yum groupinfo group1 显示程序组group1信息yum search string 根据关键字string查找安装包
+yum provides package1 列出package1软件包提供哪些文件命令
+
+4 删除程序
+yum remove package1 删除程序包package1
+yum erase package1 删除程序包package1
+yum groupremove group1 删除程序组group1
+yum deplist package1 查看程序package1依赖情况
+
+5 清除缓存
+yum clean packages 清除缓存目录下的软件包
+yum clean headers 清除缓存目录下的 headers
+yum clean oldheaders 清除缓存目录下旧的 headers
+yum clean, yum clean all (= yum clean packages; yum clean oldheaders) 清除缓存目录下的软件包及旧的headers
+</code></pre>
+<p>参考博客： <a href="https://www.cnblogs.com/chuncn/archive/2010/10/17/1853915.html">linux yum命令详解</a></p>
+<h3 id="52-yum加速">5.2 yum加速</h3>
+<p>如果发现自己的yum下载安装比较慢的话可以考虑给yum更换源或者安装插件 <strong>yum-fastestmirror</strong>,这个插件可以自动查找最快的源。</p>
+<p><code>sudo yum install yum-fastestmirror</code></p>
+<p>如果想手动更换源可以参考简书博客 <a href="https://www.jianshu.com/p/b7cd2f9fb8b7">《yum源加速》</a></p>
+<h3 id="53-安装常用软件">5.3 安装常用软件</h3>
+<p>因为我使用的是最小化安装，所以有些经常使用的软件没有安装进来，比如wget、Vim、net-tools等，Centos 使用yum来安装软件，在这我们来使用yum安装一下常用软件。</p>
+<ol>
+<li><code>sudo yum install -y vim</code> ：安装vim文本编辑器</li>
+<li><code>sudo yum install -y wget</code> : 安装wget网络文件下载工具</li>
+<li><code>sudo yum install -y net-tools</code> : 安装基础网络工具（可以使用ifconfig来查看网卡了）</li>
+</ol>
+<p>暂时只发现这些常用但未安装的软件，如果需要，可以自行安装。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用VirtualBox导入导出虚拟机]]></title>
+        <id>https://blog.wlzhfn.com/post/use-virtualbox-import-or-export-vm/</id>
+        <link href="https://blog.wlzhfn.com/post/use-virtualbox-import-or-export-vm/">
+        </link>
+        <updated>2019-05-14T15:00:33.000Z</updated>
+        <summary type="html"><![CDATA[<p>本文介绍了如何使用<a href="https://www.virtualbox.org">VirtualBox</a>导出和导入虚拟机，并提供了<a href="https://www.centos.org/">Centos7.6</a>的纯净版模板。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>本文介绍了如何使用<a href="https://www.virtualbox.org">VirtualBox</a>导出和导入虚拟机，并提供了<a href="https://www.centos.org/">Centos7.6</a>的纯净版模板。</p>
+ <!-- more -->
+<p>如果你需要Centos7.6的纯净模板（在 Minimal安装基础上只安装了vim、wget和net-tools 软件）,请直接跳到文末寻找。</p>
+<h2 id="1-虚拟机导出">1 虚拟机导出</h2>
+<p>我新装了一个纯净版的Centos7.6系统还没有安装任何软件，所以我打算把这个虚拟机导出来作为模板，以后需要新建虚拟机的时候直接将这个模板导入就可以了，不需要再重新安装操作系统。</p>
+<p>使用VirtualBox导出很简单：</p>
+<p>首先关闭虚拟机。</p>
+<p>然后选择管理-&gt;导出</p>
+<figure data-type="image" tabindex="1"><img src="http://prj7m7adg.bkt.clouddn.com/images/20190515142626.png" alt="导出虚拟机" loading="lazy"></figure>
+<p>选择虚拟机-&gt;下一步</p>
+<figure data-type="image" tabindex="2"><img src="http://prj7m7adg.bkt.clouddn.com/images/%E9%80%89%E6%8B%A9%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%BC%E5%87%BA.png" alt="选择虚拟机导出" loading="lazy"></figure>
+<p>选择导出位置和文件类型（我一般选ova文件，格式为ovf1.0）-&gt;下一步</p>
+<figure data-type="image" tabindex="3"><img src="http://prj7m7adg.bkt.clouddn.com/images/exportVMFile.png" alt="设置文件导出路径和类型" loading="lazy"></figure>
+<p>导出虚拟机配置（我在这一步通常会把自己的root密码还有其他用户名密码，以及电脑的面熟写到描述当中）</p>
+<figure data-type="image" tabindex="4"><img src="http://prj7m7adg.bkt.clouddn.com/images/exportVMInfo.png" alt="导出虚拟机配置" loading="lazy"></figure>
+<p>比如：</p>
+<pre><code>这个虚拟机作为纯净模板使用
+
+用户：
+ root:123456
+ centos:centos
+软件：
+ Minimal Install
+ wget
+ vim
+网络文件修改：
+ /etc/sysconfig/network-scripts/ifcfg-enp0s8 
+</code></pre>
+<p>点击导出，很快就导出成功了。</p>
+<p>查看一下导出的ova文件还不到600M。跟重新安装系统相比，导入虚拟机模板要更加简便快捷，而且导出的ova文件比下载的操作系统镜像文件要小很多。</p>
+<h2 id="2-虚拟机导入">2 虚拟机导入</h2>
+<p>点击VirtualBox 管理-&gt;导入虚拟电脑</p>
+<figure data-type="image" tabindex="5"><img src="http://prj7m7adg.bkt.clouddn.com/images/importVM.png" alt="导入虚拟机" loading="lazy"></figure>
+<p>选择导入文件路径-&gt;下一步</p>
+<figure data-type="image" tabindex="6"><img src="http://prj7m7adg.bkt.clouddn.com/images/importVMFile.png" alt="选择导入文件" loading="lazy"></figure>
+<p>导入设置（在这里可以修改虚拟机名称，描述，内存，硬盘，CPU等信息）-&gt;导入</p>
+<figure data-type="image" tabindex="7"><img src="http://prj7m7adg.bkt.clouddn.com/images/importSettings.png" alt="导入设置" loading="lazy"></figure>
+<p>很快即可导入成功。导入成功后我们双击开启虚拟机。登录使用 centos：centos  或 root:123456</p>
+<p>登陆成功后使用<code>ifconfig</code>命令查看网卡信息，发现enp0s8网卡还是使用的之前设置的静态IP。我们应该重新给他设置一个静态IP。</p>
+<p><code>sudo vim /etc/sysconfig/network-scripts/ifcfg-enp0s8</code></p>
+<pre><code class="language-properties">TYPE=Ethernet
+
+BOOTPROTO=static
+DEFROUTE=yes
+PEERDNS=yes
+PEERROUTES=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_PEERDNS=yes
+IPV6_PEERROUTES=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+
+NAME=enp0s8
+#UUID=c2742aa6-8156-464b-abb8-6a2ec229ec76 需要去掉
+
+DEVICE=enp0s8
+
+ONBOOT=yes
+
+##add
+IPADDR=这里设置虚拟机静态IP地址（注意这个IP地址不能与其他设备的IP有冲突，并且与你的主机在同一网段）
+NETMASK=子网掩码
+GATEWAY=网关
+</code></pre>
+<p>然后使用 <code>sudo systemctl restart network</code> 重启network ,这样就可以导入一个可用的虚拟机了。</p>
+<h2 id="3-centos76纯净模板">3 centos7.6纯净模板</h2>
+<p>我自己做好了一个Centos7.6的纯净版本（ 最小化安装，只额外安装了wget、 vim），有需要的可以直接下载使用。</p>
+<pre><code>登录用户：
+  root:123456
+  centos:centos
+</code></pre>
+<p>百度网盘链接：</p>
+<p>链接：<a href="https://pan.baidu.com/s/1LXHFU6-FOhRphgnJ6WyhKQ">https://pan.baidu.com/s/1LXHFU6-FOhRphgnJ6WyhKQ</a></p>
+<p>提取码：k7up</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Hello Gridea]]></title>
+        <id>https://blog.wlzhfn.com/post/hello-gridea/</id>
+        <link href="https://blog.wlzhfn.com/post/hello-gridea/">
+        </link>
+        <updated>2018-12-11T16:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+<!-- more -->
+<p><a href="https://github.com/getgridea/gridea">Github</a><br>
+<a href="https://gridea.dev/">Gridea 主页</a><br>
+<a href="http://fehey.com/">示例网站</a></p>
+<h2 id="特性">特性👇</h2>
+<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
+<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
+<p>🏷️  你可以对文章进行标签分组</p>
+<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
+<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
+<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
+<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
+<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
+<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
+<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
+<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
+<p>未来，它一定会成为你离不开的伙伴</p>
+<p>尽情发挥你的才华吧！</p>
+<p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+</feed>

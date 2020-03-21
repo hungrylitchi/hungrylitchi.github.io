@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://blog.wlzhfn.com/favicon.ico?v=1583684195782">
+<link rel="shortcut icon" href="https://blog.wlzhfn.com/favicon.ico?v=1584804575683">
 <link rel="stylesheet" href="https://blog.wlzhfn.com/styles/main.css">
 
 
@@ -32,7 +32,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://blog.wlzhfn.com">
-        <img src="https://blog.wlzhfn.com/images/avatar.png?v=1583684195782" class="site-logo">
+        <img src="https://blog.wlzhfn.com/images/avatar.png?v=1584804575683" class="site-logo">
         <h1 class="site-title">饥饿的荔枝</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -112,34 +112,34 @@
 <p>下载Centos7镜像  我在<a href="https://www.centos.org/download/">官网</a>找的<a href="http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso">7.6版本</a>的DVD.iso ，7版本差异应该不大</p>
 <h2 id="2-新建虚拟机">2 新建虚拟机</h2>
 <p>打开VirtualBox -&gt;新建-&gt; 输入虚拟机名称、操作系统类型（Linux）、和版本（Centos属于RedHat）-&gt;下一步</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb8dd3df5f642958.png" alt="新建虚拟机"></p>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2019/05/15/5cdb8dd3df5f642958.png" alt="新建虚拟机" loading="lazy"></figure>
 <p>接下来调整内存大小和虚拟磁盘我都选择的默认。</p>
 <p>虚拟磁盘文件类型选择的时候有多种类型可以选择：VDI、VHD、和VMDK。</p>
 <p>我上网查询这个如果创建的虚拟机只在VirtualBox上运行可以默认选择VDI，这个VDI是VirtualBox独有的虚拟硬盘文件类型。如果希望以后在VMWare上也可以使用这个虚拟机，那么选择VMDK。</p>
 <p>我这里选择VMDK。</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb8ea3c435896798.png" alt="选择虚拟磁盘文件类型"></p>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2019/05/15/5cdb8ea3c435896798.png" alt="选择虚拟磁盘文件类型" loading="lazy"></figure>
 <p>下面都默认即可，最后点击创建即可完成虚拟机创建。</p>
 <h2 id="3-安装操作系统">3 安装操作系统</h2>
 <h3 id="31-导入镜像文件并启动安装">3.1 导入镜像文件并启动安装</h3>
 <p>双击刚刚创建的虚拟机，会提示让你选择启动盘，将准备好的Centos7镜像文件导入，点击启动。</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb8f9e55d0c49436.png" alt="引入启动盘"></p>
+<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2019/05/15/5cdb8f9e55d0c49436.png" alt="引入启动盘" loading="lazy"></figure>
 <p>鼠标点进去虚拟机使用方向键选择install Centos Linux 回车。等待启动安装程序</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb8fc44dc0e49729.png" alt="安装Centos7 Linux"></p>
+<figure data-type="image" tabindex="4"><img src="https://i.loli.net/2019/05/15/5cdb8fc44dc0e49729.png" alt="安装Centos7 Linux" loading="lazy"></figure>
 <h3 id="32-选择安装语言">3.2 选择安装语言</h3>
 <p>选择安装语言 English&gt; English（United States）  -&gt;点击Continue</p>
 <h3 id="33-进入安装设置页面">3.3 进入安装设置页面</h3>
 <p>进入安装设置页面，这是整个安装过程中最重要的一个页面。</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb8fed26dd536727.png" alt="安装配置"></p>
+<figure data-type="image" tabindex="5"><img src="https://i.loli.net/2019/05/15/5cdb8fed26dd536727.png" alt="安装配置" loading="lazy"></figure>
 <ol>
 <li>Date&amp;Time选择 Asia <strong>Shanghai</strong></li>
 <li>KEYBOARD和LANG SUPPORT使用<strong>默认</strong>English</li>
 <li>INSTALLATION SOURCE<strong>默认</strong>选择LocalMedia</li>
 <li>进入SOFTWARE SELECTION选择<strong>Minimal Install</strong>（这个是最小安装，安装好后只有命令行终端，如果需要图形化桌面可以再这里选择GNOME Desktop安装），点击Done完成。</li>
 </ol>
-<p><img src="https://i.loli.net/2019/05/15/5cdb902260e9398680.png" alt="安装方式">
-5. kdump是在系统崩溃、死锁或者死机的时候用来转储内存运行参数的一个工具和服务，默认使用可以不必调整。
+<p><img src="https://i.loli.net/2019/05/15/5cdb902260e9398680.png" alt="安装方式" loading="lazy"><br>
+5. kdump是在系统崩溃、死锁或者死机的时候用来转储内存运行参数的一个工具和服务，默认使用可以不必调整。<br>
 6. Destination 必须选择，进入后选中Local Standard Disks中的磁盘即可。然后点击Done。</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb9053189be36292.png" alt="选择安装位置"></p>
+<figure data-type="image" tabindex="6"><img src="https://i.loli.net/2019/05/15/5cdb9053189be36292.png" alt="选择安装位置" loading="lazy"></figure>
 <ol start="7">
 <li>kdump是在系统崩溃、死锁或者死机的时候用来转储内存运行参数的一个工具和服务，默认使用可以不必调整。</li>
 <li>安全策略和网络连接先忽略。</li>
@@ -147,37 +147,37 @@
 </ol>
 <h3 id="34-创建用户">3.4 创建用户</h3>
 <p>安装过程中可以为root创建密码，并创建一个新用户</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb906a68b6c84030.png" alt=""></p>
+<figure data-type="image" tabindex="7"><img src="https://i.loli.net/2019/05/15/5cdb906a68b6c84030.png" alt="" loading="lazy"></figure>
 <p>root密码如果比较短，那么需要点击两次done来确认完成。</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb9078ec7b455805.png" alt="root设置密码"></p>
+<figure data-type="image" tabindex="8"><img src="https://i.loli.net/2019/05/15/5cdb9078ec7b455805.png" alt="root设置密码" loading="lazy"></figure>
 <p>创建用户，用户名和密码自己指定 ，选中make this user admin ，可以使用这个用户执行sodu命令。</p>
 <p>我创建的是centos：centos ，weak密码需要两次done。</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb8b33c9d5e79618.png" alt="创建用户"></p>
+<figure data-type="image" tabindex="9"><img src="https://i.loli.net/2019/05/15/5cdb8b33c9d5e79618.png" alt="创建用户" loading="lazy"></figure>
 <h3 id="35-完成">3.5 完成</h3>
-<p>等待安装完成后点击 Finish Configuration，等待配置初始化完成后点击Reboot重启虚拟机。<img src="https://i.loli.net/2019/05/15/5cdb90bd2553b95368.png" alt="完成配置"></p>
+<p>等待安装完成后点击 Finish Configuration，等待配置初始化完成后点击Reboot重启虚拟机。<img src="https://i.loli.net/2019/05/15/5cdb90bd2553b95368.png" alt="完成配置" loading="lazy"></p>
 <p>重启完成后Linux就安装成功了，可以使用刚刚创建的centos用户或root用户登录虚拟机。</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb90ce9a30693158.png" alt="安装成功"></p>
+<figure data-type="image" tabindex="10"><img src="https://i.loli.net/2019/05/15/5cdb90ce9a30693158.png" alt="安装成功" loading="lazy"></figure>
 <p>到这里虚拟机就已经安装好了，但是由于我们使用的是Minimal Install安装方式，而且没有设置网络连接，所以Linux上很多常用的软件我们都无法使用，下面我们就来设置一下网络，设置好网络后再安装一些常用软件。</p>
 <h2 id="4-网络设置">4 网络设置</h2>
 <p>我们想要使用虚拟机，一定是想要它进行联网的，而且我们想要使用自己的电脑去连接并登录这台虚拟机， 那么就应该知道它的ip地址。所以在这里我们就对虚拟机的网络进行一下配置，并给虚拟机设置一个静态ip地址。</p>
 <h3 id="41-虚拟机联网设置">4.1 虚拟机联网设置</h3>
 <p>先将虚拟机关闭，然后在VirtualBox上右键点击虚拟机-&gt;设置-&gt;网络</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb90dd56c9998369.png" alt="网卡1"></p>
+<figure data-type="image" tabindex="11"><img src="https://i.loli.net/2019/05/15/5cdb90dd56c9998369.png" alt="网卡1" loading="lazy"></figure>
 <p>刚创建的虚拟机默认只打开了网卡1，并设置了<code>网络地址转换（NAT）</code> 的连接方式，我们想要使用网络还需要打开网卡2选择<strong>桥接网卡</strong>，并在界面名称选择当前使用的网卡（一般来说你电脑上正在使用的是有线网还是无线网，这个网卡会不一样，自己区分一下）。</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb90ef8cab595271.png" alt="添加桥接网卡"></p>
+<figure data-type="image" tabindex="12"><img src="https://i.loli.net/2019/05/15/5cdb90ef8cab595271.png" alt="添加桥接网卡" loading="lazy"></figure>
 <p>点击ok ，启动虚拟机。启动计算机后最好使用root登录，因为有些配置需要root权限。</p>
 <p>我们先使用<code>ip addr</code> 命令查看下ip情况</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb90fd6b7d481459.png" alt="查看网卡情况"></p>
+<figure data-type="image" tabindex="13"><img src="https://i.loli.net/2019/05/15/5cdb90fd6b7d481459.png" alt="查看网卡情况" loading="lazy"></figure>
 <p>我们可以看到多了一个网卡 <code>enp0s8</code>,之前是只有<code>lo</code>和<code>enp0s3</code>的，而且新网卡可以看见ip地址等信息。</p>
 <p>从这里我们可以看出网卡2已经可以使用了，那么我们试试<code>ping www.baidu.com</code>来看看是否已经可以连接到互联网。</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb910eeab7e49064.png" alt="测试网络连接"></p>
+<figure data-type="image" tabindex="14"><img src="https://i.loli.net/2019/05/15/5cdb910eeab7e49064.png" alt="测试网络连接" loading="lazy"></figure>
 <p>从上图中可以看出可以ping同百度的网址，那么我们的虚拟机已经可以成功联网啦，那么虚拟机联网的问题已经解决。那么我们刚才已经查到了虚拟机的ip地址，是否可以使用本地去连接这个虚拟机呢。自己在主机上ping一下试试吧。</p>
 <p>答案肯定是可以ping通的，不过这个IP地址是<strong>动态分配</strong>的，也就是说每次开启虚拟机给这个虚拟机分配的IP都是不同的，那么如果我们需要连接这个虚拟机时候都需要先来虚拟机来查询虚拟机的IP，这样很麻烦。所以接下来我们要为虚拟机设置静态IP，让虚拟机每次开机都使用这个静态ip。</p>
 <h3 id="42-设置静态ip">4.2 设置静态ip</h3>
 <p>我觉得VirtualBox的客户端太难用，既然现在已经知道了虚拟机的ip地址，那么从这里我要使用一个软件通过SSH来连接这个虚拟机，</p>
 <p>我使用的是<a href="https://mobaxterm.mobatek.net/"><strong>MobaXterm</strong></a>，这个软件很强大，它不仅可以像PuTTY一样通过SSH连接Raspberry Pi等开源硬件，并且还能有内建SFTP文件传输、内建X server，可远程运行X窗口程序，有兴趣的同学可以自行安装体验。</p>
 <p>Centos的网卡设置都在<code>/etc/sysconfig/network-scripts/</code> 这个目录下面</p>
-<p><img src="https://i.loli.net/2019/05/15/5cdb911fd2ea124842.png" alt="查看network配置目录"></p>
+<figure data-type="image" tabindex="15"><img src="https://i.loli.net/2019/05/15/5cdb911fd2ea124842.png" alt="查看network配置目录" loading="lazy"></figure>
 <p>我们可以看到其中有 <code>ifcfg-enp0s3</code>和<code>ifcfg-lo</code>这两个文件就是lo和enp0s3两个网卡的设置文件，那么enp0s8没有配置文件，我们可以在这里创建一下。将ifcfg-enp0s3文件复制并命名为ifcfg-enp0s8。</p>
 <pre><code class="language-shell">cd /etc/sysconfig/network-scripts/
 cp ifcfg-enp0s3 ifcfg-enp0s8
@@ -283,7 +283,7 @@ yum clean, yum clean all (= yum clean packages; yum clean oldheaders) 清除缓�
             
               <div class="tag-container">
                 
-                  <a href="https://blog.wlzhfn.com/tag/linux" class="tag">
+                  <a href="https://blog.wlzhfn.com/tag/linux/" class="tag">
                     Linux
                   </a>
                 
@@ -292,7 +292,7 @@ yum clean, yum clean all (= yum clean packages; yum clean oldheaders) 清除缓�
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://blog.wlzhfn.com/post/use-virtualbox-import-or-export-vm">
+                <a href="https://blog.wlzhfn.com/post/use-virtualbox-import-or-export-vm/">
                   <h3 class="post-title">
                     使用VirtualBox导入导出虚拟机
                   </h3>

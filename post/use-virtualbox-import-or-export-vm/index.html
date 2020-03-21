@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://blog.wlzhfn.com/favicon.ico?v=1583684195782">
+<link rel="shortcut icon" href="https://blog.wlzhfn.com/favicon.ico?v=1584804575683">
 <link rel="stylesheet" href="https://blog.wlzhfn.com/styles/main.css">
 
 
@@ -32,7 +32,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://blog.wlzhfn.com">
-        <img src="https://blog.wlzhfn.com/images/avatar.png?v=1583684195782" class="site-logo">
+        <img src="https://blog.wlzhfn.com/images/avatar.png?v=1584804575683" class="site-logo">
         <h1 class="site-title">饥饿的荔枝</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -112,13 +112,13 @@
 <p>使用VirtualBox导出很简单：</p>
 <p>首先关闭虚拟机。</p>
 <p>然后选择管理-&gt;导出</p>
-<p><img src="http://prj7m7adg.bkt.clouddn.com/images/20190515142626.png" alt="导出虚拟机"></p>
+<figure data-type="image" tabindex="1"><img src="http://prj7m7adg.bkt.clouddn.com/images/20190515142626.png" alt="导出虚拟机" loading="lazy"></figure>
 <p>选择虚拟机-&gt;下一步</p>
-<p><img src="http://prj7m7adg.bkt.clouddn.com/images/%E9%80%89%E6%8B%A9%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%BC%E5%87%BA.png" alt="选择虚拟机导出"></p>
+<figure data-type="image" tabindex="2"><img src="http://prj7m7adg.bkt.clouddn.com/images/%E9%80%89%E6%8B%A9%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%BC%E5%87%BA.png" alt="选择虚拟机导出" loading="lazy"></figure>
 <p>选择导出位置和文件类型（我一般选ova文件，格式为ovf1.0）-&gt;下一步</p>
-<p><img src="http://prj7m7adg.bkt.clouddn.com/images/exportVMFile.png" alt="设置文件导出路径和类型"></p>
+<figure data-type="image" tabindex="3"><img src="http://prj7m7adg.bkt.clouddn.com/images/exportVMFile.png" alt="设置文件导出路径和类型" loading="lazy"></figure>
 <p>导出虚拟机配置（我在这一步通常会把自己的root密码还有其他用户名密码，以及电脑的面熟写到描述当中）</p>
-<p><img src="http://prj7m7adg.bkt.clouddn.com/images/exportVMInfo.png" alt="导出虚拟机配置"></p>
+<figure data-type="image" tabindex="4"><img src="http://prj7m7adg.bkt.clouddn.com/images/exportVMInfo.png" alt="导出虚拟机配置" loading="lazy"></figure>
 <p>比如：</p>
 <pre><code>这个虚拟机作为纯净模板使用
 
@@ -136,11 +136,11 @@
 <p>查看一下导出的ova文件还不到600M。跟重新安装系统相比，导入虚拟机模板要更加简便快捷，而且导出的ova文件比下载的操作系统镜像文件要小很多。</p>
 <h2 id="2-虚拟机导入">2 虚拟机导入</h2>
 <p>点击VirtualBox 管理-&gt;导入虚拟电脑</p>
-<p><img src="http://prj7m7adg.bkt.clouddn.com/images/importVM.png" alt="导入虚拟机"></p>
+<figure data-type="image" tabindex="5"><img src="http://prj7m7adg.bkt.clouddn.com/images/importVM.png" alt="导入虚拟机" loading="lazy"></figure>
 <p>选择导入文件路径-&gt;下一步</p>
-<p><img src="http://prj7m7adg.bkt.clouddn.com/images/importVMFile.png" alt="选择导入文件"></p>
+<figure data-type="image" tabindex="6"><img src="http://prj7m7adg.bkt.clouddn.com/images/importVMFile.png" alt="选择导入文件" loading="lazy"></figure>
 <p>导入设置（在这里可以修改虚拟机名称，描述，内存，硬盘，CPU等信息）-&gt;导入</p>
-<p><img src="http://prj7m7adg.bkt.clouddn.com/images/importSettings.png" alt="导入设置"></p>
+<figure data-type="image" tabindex="7"><img src="http://prj7m7adg.bkt.clouddn.com/images/importSettings.png" alt="导入设置" loading="lazy"></figure>
 <p>很快即可导入成功。导入成功后我们双击开启虚拟机。登录使用 centos：centos  或 root:123456</p>
 <p>登陆成功后使用<code>ifconfig</code>命令查看网卡信息，发现enp0s8网卡还是使用的之前设置的静态IP。我们应该重新给他设置一个静态IP。</p>
 <p><code>sudo vim /etc/sysconfig/network-scripts/ifcfg-enp0s8</code></p>
@@ -186,12 +186,21 @@ GATEWAY=网关
             
               <div class="tag-container">
                 
-                  <a href="https://blog.wlzhfn.com/tag/linux" class="tag">
+                  <a href="https://blog.wlzhfn.com/tag/linux/" class="tag">
                     Linux
                   </a>
                 
               </div>
             
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://blog.wlzhfn.com/post/hello-gridea/">
+                  <h3 class="post-title">
+                    Hello Gridea
+                  </h3>
+                </a>
+              </div>
             
 
             

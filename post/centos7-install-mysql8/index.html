@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Centos7安装Mysql8绿色版 | 饥饿的荔枝</title>
+<meta name="description" content="&lt;h2&gt;微信公众号：饥饿的荔枝&lt;br/&gt;&lt;/h2&gt;
+&lt;image height=&#34;200&#34; width=&#34;200&#34; src=&#34;https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/qrcode_for_gh_5f9669a6c469_258.jpg&#34;&gt;
+&lt;br/&gt;&lt;br/&gt;
+	&lt;h3&gt;不停搜寻 不断渴求&lt;br/&gt;&lt;/h3&gt;">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://blog.wlzhfn.com/favicon.ico?v=1584804575683">
+<link rel="stylesheet" href="https://blog.wlzhfn.com/styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://blog.wlzhfn.com">
+        <img src="https://blog.wlzhfn.com/images/avatar.png?v=1584804575683" class="site-logo">
+        <h1 class="site-title">饥饿的荔枝</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      <h2>微信公众号：饥饿的荔枝<br/></h2>
+<image height="200" width="200" src="https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/qrcode_for_gh_5f9669a6c469_258.jpg">
+<br/><br/>
+	<h3>不停搜寻 不断渴求<br/></h3>
+    </div>
+    <div class="site-footer">
+      
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Centos7安装Mysql8绿色版</h2>
+            <div class="post-date">2020-03-21</div>
+            
+              <div class="feature-container" style="background-image: url('https://blog.wlzhfn.com/post-images/centos7-install-mysql8.png')">
+              </div>
+            
+            <div class="post-content">
+              <p>又一次在我的虚拟机上安装Mysql8，其实在Centos可以使用yum安装Mysql，我之前也是这样安装的：先下载安装npm然后等yum install下载安装好后进行一些配置。<br>
+但是这次在install时候网速奇慢，更换阿里云镜像后更慢。。。我又想起以前yum安装的时候各种配置文件找不到，所以我这次决定自己动手安装个绿色版。</p>
+<h1 id="下载">下载</h1>
+<p><a href="https://dev.mysql.com/downloads/mysql/">https://dev.mysql.com/downloads/mysql/</a></p>
+<p>这里还要先检查一下自己Linux系统上是否安装有对应版本的glibc 否则需要安装升级<br>
+检查命令： <code>strings /lib64/libc.so.6 | grep GLIBC</code><br>
+<img src="https://img-blog.csdnimg.cn/20200321200346387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="下载mysql压缩包" loading="lazy"><br>
+这里我选择了xz格式文件，这个格式在Linux里面还要解压一次才能得到tar包。嫌麻烦的可以直接选择tar包下载。<br>
+把下载链接复制到迅雷里面下载简直快到飞起。<br>
+或者网速够快可以直接在Linux里wget这个包。</p>
+<h1 id="解压">解压</h1>
+<p>解压之前最好先检查一下之前操作系统上是否有安装过Mysql或Mariadb，统统干掉。<br>
+查找mysql相关安装命令：<br>
+<code>rpm -qa|grep -i mysql</code><br>
+卸载命令：<br>
+<code>rpm –ev 包名</code><br>
+查找Mysql目录命令：<br>
+<code>find / -name mysql</code><br>
+删除目录命令：<br>
+<code>rm –rf 目录名</code></p>
+<p>解压xz文件:<br>
+<code>xz -dk mysql-8.0.19-linux-glibc2.12-x86_64.tar.xz</code><br>
+解压tar文件：<br>
+<code>tar xvf mysql-8.0.19-linux-glibc2.12-x86_64.tar</code><br>
+将解压出来的 mysql文件夹复制或移动到你 想放的地方<br>
+我放在了 /usr/local/mysql<br>
+<code>mv mysql-8.0.19-linux-glibc2.12-x86_64 /usr/local/mysql</code><br>
+在解压的时候有个小插曲，因为我的吝啬，虚拟机磁盘只配置了8个G，解压的时候磁盘不够用了，只能给虚拟机扩展磁盘，有兴需要的可以参考这篇文章https://bugxia.com/581.html</p>
+<h1 id="设置mysql用户和权限">设置mysql用户和权限</h1>
+<p>如果之前有mysql用户可以先删除<br>
+<code>userdel -r mysql</code><br>
+添加mysql用户 :<br>
+<code>useradd mysql</code><br>
+设置权限：<br>
+<code>chown -R mysql:mysql /usr/local/mysql</code></p>
+<h1 id="创建配置文件">创建配置文件</h1>
+<p>创建配置文件 my.cnf<br>
+<code>vim /etc/my.cnf</code></p>
+<pre><code class="language-properties">[mysqld]
+#用户
+user=root
+#端口
+port=3306
+#这里配置0.0.0.0，任何ip都可以登录
+bind-address=0.0.0.0
+#数据地址
+datadir=/usr/local/mysql/data
+#socket
+socket=/tmp/mysql.sock
+#日志地址
+log-error=/usr/local/mysql/log/mysqld.log
+#pid
+pid-file=/tmp/mysqld/mysqld.pid
+default_authentication_plugin=mysql_native_password
+</code></pre>
+<p>创建所需目录和文件</p>
+<pre><code class="language-bash">#log
+mkdir /usr/local/mysql/log
+touch /usr/local/mysql/log/mysqld.log
+#data
+mkdir /usr/local/mysql/data
+#pid
+mkdir /tmp/mysqld/
+touch /tmp/mysqld/mysqld.pid
+chown -R mysql:mysql /tmp/mysqld/
+#socket
+touch /tmp/mysql.sock
+chmod 755 /tmp/mysql.sock
+</code></pre>
+<p>好了，到这里数据库就已经安装好了，但还需要一些设置才能使用</p>
+<h1 id="初始化数据库">初始化数据库</h1>
+<p>我们先将mysql命令写入环境变量，方便后续使用</p>
+<pre><code class="language-bash">echo &quot;export PATH=$PATH:/usr/local/mysql/bin&quot;  &gt;&gt;  /etc/profile
+source /etc/profile
+</code></pre>
+<p>初始化数据库</p>
+<pre><code class="language-bash">mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+</code></pre>
+<p>查看日志文件，其中有初始化的密码，把密码记下来<br>
+<code>cat /usr/local/mysql/log/mysqld.log</code><br>
+<img src="https://img-blog.csdnimg.cn/20200321215350971.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="mysql日志" loading="lazy"></p>
+<h1 id="登录数据库修改密码">登录数据库修改密码</h1>
+<p>第一次安全启动数据库<br>
+<code>mysqld_safe --user=mysql &amp;</code></p>
+<p>查看数据库是否启动<br>
+<code>ps -ef | grep mysql |grep -v grep</code></p>
+<p>启动成功后使用root账户登录<br>
+<code>mysql -uroot -p密码</code><br>
+登录成功<img src="https://img-blog.csdnimg.cn/20200321220344631.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="mysql登录成功" loading="lazy"><br>
+然后修改密码为你自己的密码：<br>
+<code>alter user 'root'@'localhost' identified by '你的密码';</code><br>
+修改host：<br>
+<code>update mysql.user set host = '%' where user = 'root';</code><br>
+<img src="https://img-blog.csdnimg.cn/20200321220835911.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="修改密码" loading="lazy"><br>
+然后就可以退出了。<br>
+记得开启3306端口才可以远程访问。<br>
+查看已经开放的端口：<br>
+<code>firewall-cmd --list-ports</code><br>
+开启端口<br>
+<code>firewall-cmd --zone=public --add-port=3306/tcp --permanent</code><br>
+重启防火墙<br>
+<code>firewall-cmd --reload</code></p>
+<h1 id="设置数据库开机启动">设置数据库开机启动</h1>
+<p>将mysql.server 拷贝到init.d下<br>
+<code>cp -a /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql</code><br>
+设置开机启动 并查看是否开启成功<br>
+<code>chkconfig --add mysql</code><br>
+<code>chkconfig --list mysql</code><br>
+<img src="https://img-blog.csdnimg.cn/20200321222331323.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2h1bmdyeWxpdGNoaQ==,size_16,color_FFFFFF,t_70" alt="查看是否开机启动" loading="lazy"></p>
+<p>到这就安装完成了，去试试你的mysql吧，有什么问题可以留言讨论，希望能够帮到你。</p>
+<p>参考博客：<br>
+<a href="https://www.cnblogs.com/javabg/p/9951852.html">https://www.cnblogs.com/javabg/p/9951852.html</a><br>
+<a href="https://www.jianshu.com/p/b97743024d57">https://www.jianshu.com/p/b97743024d57</a></p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://blog.wlzhfn.com/post/wo-shi-zen-me-shi-yong-postman-de-yi/">
+                  <h3 class="post-title">
+                    我是怎么使用Postman的【一】
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
