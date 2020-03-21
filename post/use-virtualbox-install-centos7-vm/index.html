@@ -10,98 +10,90 @@
 	&lt;h3&gt;不停搜寻 不断渴求&lt;br/&gt;&lt;/h3&gt;">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://blog.wlzhfn.com/favicon.ico?v=1584805201510">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://blog.wlzhfn.com/favicon.ico?v=1584804575683">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
 <link rel="stylesheet" href="https://blog.wlzhfn.com/styles/main.css">
 
 
-
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
 
 <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
 
-
   </head>
   <body>
-    <div id="app" class="main">
-
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="https://blog.wlzhfn.com">
-        <img src="https://blog.wlzhfn.com/images/avatar.png?v=1584804575683" class="site-logo">
-        <h1 class="site-title">饥饿的荔枝</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
-      
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
-      
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
-      
-    </div>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://blog.wlzhfn.com">饥饿的荔枝</a></h3>
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
         
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      <h2>微信公众号：饥饿的荔枝<br/></h2>
-<image height="200" width="200" src="https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/qrcode_for_gh_5f9669a6c469_258.jpg">
-<br/><br/>
-	<h3>不停搜寻 不断渴求<br/></h3>
-    </div>
-    <div class="site-footer">
-      
-    </div>
-  </div>
-</div>
-
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">使用VirtualBox安装Centos7虚拟机</h2>
-            <div class="post-date">2019-05-15</div>
+          <li>
             
-              <div class="feature-container" style="background-image: url('http://prj7m7adg.bkt.clouddn.com/images/20190515145445.png')">
-              </div>
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>使用VirtualBox安装Centos7虚拟机</h1>
+            <p class="article-meta">
+              2019-05-15
+              
+                <a href="https://blog.wlzhfn.com/tag/linux/" class="badge secondary">
+                  Linux
+                </a>
+              
+            </p>
+            
+              <img src="http://prj7m7adg.bkt.clouddn.com/images/20190515145445.png" alt="使用VirtualBox安装Centos7虚拟机">
             
             <div class="post-content">
               <p>本文介绍了如何使用VirtualBox安装Centos7虚拟机，如果你想知道如何使用VirtualBox安装Centos7，那么就跟我一起来学习吧。</p>
@@ -280,32 +272,128 @@ yum clean, yum clean all (= yum clean packages; yum clean oldheaders) 清除缓�
 <p>暂时只发现这些常用但未安装的软件，如果需要，可以自行安装。</p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://blog.wlzhfn.com/tag/linux/" class="tag">
-                    Linux
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://blog.wlzhfn.com/post/use-virtualbox-import-or-export-vm/">
-                  <h3 class="post-title">
-                    使用VirtualBox导入导出虚拟机
-                  </h3>
-                </a>
-              </div>
-            
-
-            
-
-          </div>
-
+          </article>
         </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://blog.wlzhfn.com/post/use-virtualbox-import-or-export-vm/">
+                <h3 class="post-title">
+                  使用VirtualBox导入导出虚拟机
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
       </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://blog.wlzhfn.com/images/avatar.png?v=1584805201510" class="no-responsive avatar">
+    <div class="text-muted"><h2>微信公众号：饥饿的荔枝<br/></h2>
+<image height="200" width="200" src="https://raw.githubusercontent.com/hungrylitchi/image-bed/master/images/qrcode_for_gh_5f9669a6c469_258.jpg">
+<br/><br/>
+	<h3>不停搜寻 不断渴求<br/></h3></div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://blog.wlzhfn.com/post/centos7-install-mysql8/">Centos7安装Mysql8绿色版</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://blog.wlzhfn.com/post/wo-shi-zen-me-shi-yong-postman-de-yi/">我是怎么使用Postman的【一】</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://blog.wlzhfn.com/post/ajax-cross-origin-summary/">Ajax跨域问题总结</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://blog.wlzhfn.com/post/use-virtualbox-install-centos7-vm/">使用VirtualBox安装Centos7虚拟机</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://blog.wlzhfn.com/post/use-virtualbox-import-or-export-vm/">使用VirtualBox导入导出虚拟机</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://blog.wlzhfn.com/post/about/">关于</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://blog.wlzhfn.com/post/hello-gridea/">Hello Gridea</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://blog.wlzhfn.com/tag/tools/" class="badge ">
+          工具
+        </a>
+      
+        <a href="https://blog.wlzhfn.com/tag/problems-of-develop/" class="badge secondary">
+          开发常见问题
+        </a>
+      
+        <a href="https://blog.wlzhfn.com/tag/linux/" class="badge warning">
+          Linux
+        </a>
+      
+        <a href="https://blog.wlzhfn.com/tag/gridea/" class="badge warning">
+          Gridea
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    
+  </div>
+</div>
+
+
     </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -315,13 +403,6 @@ yum clean, yum clean all (= yum clean packages; yum clean oldheaders) 清除缓�
 AOS.init();
 
 hljs.initHighlightingOnLoad()
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
 
 </script>
 
