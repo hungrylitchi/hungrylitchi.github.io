@@ -1,4 +1,5 @@
-var proxy = 'PROXY 127.0.0.1:10809;DIRECT;';
+var proxy1 = 'PROXY 127.0.0.1:7890;DIRECT;';
+var proxy2 = 'PROXY 127.0.0.1:10809;DIRECT;';
 var rules = [
     [
         [],
@@ -83,6 +84,10 @@ var rules = [
             "yda.gov.tw",
             "youdao.com",
             "zhongsou.com"
+        ],
+        ["openai.com",
+        "cloudflare.com",
+        "ingest.com"
         ],
         [
             "000webhost.com",
@@ -6002,8 +6007,19 @@ function testHost(host, index) {
     for (var i = 0; i < rules[index].length; i++) {
         for (var j = 0; j < rules[index][i].length; j++) {
             lastRule = rules[index][i][j];
-            if (host == lastRule || host.endsWith('.' + lastRule))
-                return i % 2 == 0 ? 'DIRECT' : proxy;
+            if (host == lastRule || host.endsWith('.' + lastRule)){
+                // return i % 2 == 0 ? 'DIRECT' : proxy1;
+                if(i % 3 == 0 ) {
+                    return 'DIRECT';
+                } 
+                else if(i % 3 == 1 ){
+                    return proxy1;
+                }
+                else if(i % 3 == 2 ){
+                    return proxy2;
+                }
+            }
+
         }
     }
     lastRule = '';
@@ -6021,3 +6037,6 @@ if (!String.prototype.endsWith) {
         return lastIndex !== -1 && lastIndex === position;
   };
 }
+
+var find = FindProxyForURL("","ingest.com");
+console.log(find)
